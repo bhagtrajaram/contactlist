@@ -1,29 +1,13 @@
-# # from django.shortcuts import render
-#
-# # Create your views here.
-# from django.shortcuts import render
-# from django.http import HttpResponse
-# import requests
-# # Create your views here.
-# def users(request):
-#     #pull data from third party rest api
-#     response = requests.get('https://jsonplaceholder.typicode.com/users')
-#     #convert reponse data into json
-#     users = response.json()
-#     # print(users)
-#     # return HttpResponse("Users")
-#     return render(request, "users.html")
-#     pass
-
 from django.shortcuts import render
-from django.http import HttpResponse
 import requests
-# Create your views here.
+from io import StringIO
+import pandas as pd
+from json import loads
+
 def users(request):
-    #pull data from third party rest api
-    response = requests.get('https://jsonplaceholder.typicode.com/users')
-    #convert reponse data into json
-    users = response.json()
-    #print(users)
+    response = requests.get('https://docs.google.com/spreadsheets/d/1A77-RWx7x8PK2uDm_1XlXyCy2ID9-9lhwix8wPDd5X0/pub?gid=0&single=true&output=csv')
+    df = pd.read_csv(StringIO(response.text), sep=",")
+    result = df.to_json(orient="records")
+    users = loads(result)
     return render(request, "users.html", {'users': users})
     pass

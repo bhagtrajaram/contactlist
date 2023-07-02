@@ -17,21 +17,23 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
-                        <th>Name</th>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Phone</th>
+                        <th>Firstname</th>
+                        <th>Lastname</th>
+                        <th>Street</th>
+                        <th>Zip</th>
+                        <th>City</th>
+                        <th>Image</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                     <tr>
-                        <td>{{ user.id }}</td>
-                        <td>{{ user.name }}</td>
-                        <td>{{ user.username }}</td>
-                        <td>{{ user.email }}</td>
-                        <td>{{ user.phone }}</td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.street }}</td>
+                        <td>{{ user.zip }}</td>
+                        <td>{{ user.city }}</td>
+                        <td>{{ user.image }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
