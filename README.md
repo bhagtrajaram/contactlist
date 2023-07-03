@@ -20,3 +20,10 @@ If you want to learn more about creating good readme files then refer the follow
 - [Chakra Core](https://github.com/Microsoft/ChakraCore)
 - https://pypi.org/project/Django/
 - https://pypi.org/project/djangorestframework/
+
+pytest
+cd self.assertEqual(result.objects, expected.city)
+pytest
+
+or within Pycharm
+pytest in /

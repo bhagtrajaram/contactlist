@@ -1,0 +1,6 @@
+djangorestframework==3.14.0
+Django==4.2.2
+requests==2.31.0
+tablib==3.5.0
+pandas==2.0.3
+pandera==0.15.1
