@@ -1,33 +1,40 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+### Getting Started
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+1. Clone the project
+2. Make sure your in the root of the cloned project
+3. Run the following command '*make run*'
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Output:
+```
+July 04, 2023 - 16:15:29
+Django version 4.2.2, using settings 'kpnapp.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+INFO:webapp.views:http response(csv-data):'firstname,lastname,street,zip,city,image
+Travis,Fox,1859 Clair Street,76541,Killeen,https://cdn1.iconfinder.com/data/icons/user-pictures/100/male3-512.png
+Leontine,Kasmi,1009 Kinney Street,1201,Pittsfield,https://cdn1.iconfinder.com/data/icons/user-pictures/100/female1-512.png
+Shanon,Gilsing,3644 Seneca Drive,97071,Woodburn,http://www.google.com
+Miray,Dibbets,"489 Oakridge Lane, ""test""",31201,Macon,'
+[04/Jul/2023 16:15:38] "GET / HTTP/1.1" 200 2292
+```
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
-- https://pypi.org/project/Django/
-- https://pypi.org/project/djangorestframework/
+*This project has been created in Pycharm so you can leverage this to start your docker container and run the unittests.*
 
-# Comments
+### Notes
 pytest
 
-- cli: cd /Users/bhagtrajaram/PycharmProjects/kpn_python_assignment/kpnapp
-- Pycharm: pytest in /
+- cli: cd ~/PycharmProjects/kpn_python_assignment/kpnapp
+- Pycharm-task: pytest in /
 
 prepare database
 - python manage.py test
 - python manage.py makemigrations
 - python manage.py migrate
+
+flush database
+- python manage.py flush
+
+Data endpoint
+- ~/PycharmProjects/kpn_python_assignment/kpnapp/kpnapp/settings.py
+- DATA_ENDPOINT = '<url>'
