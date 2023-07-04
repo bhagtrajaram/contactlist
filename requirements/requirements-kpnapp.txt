@@ -1,3 +1,4 @@
+--extra-index-url https://alpine-wheels.github.io/index pandas
 djangorestframework==3.14.0
 Django==4.2.2
 requests==2.31.0
