@@ -22,7 +22,7 @@ If you want to learn more about creating good readme files then refer the follow
 - https://pypi.org/project/djangorestframework/
 
 pytest
-cd self.assertEqual(result.objects, expected.city)
+cd /Users/bhagtrajaram/PycharmProjects/kpn_python_assignment/kpnapp
 pytest
 
 or within Pycharm
