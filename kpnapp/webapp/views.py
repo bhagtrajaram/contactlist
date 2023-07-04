@@ -4,6 +4,7 @@ import pandas as pd
 from .decorators import handle_connection_exception
 from .models import ContactList
 from django.shortcuts import render
+from kpnapp.settings import DATA_ENDPOINT
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -61,8 +62,7 @@ def get_html_table_of_contact_list() -> dict[str, str]:
 
 @handle_connection_exception
 def fetch_csv_entries(request: requests.Request) -> str:
-    url = "https://docs.google.com/spreadsheets/d/1A77-RWx7x8PK2uDm_1XlXyCy2ID9-9lhwix8wPDd5X0/pub?gid=0&single=true&output=csv"
-    response = requests.get(url)
+    response = requests.get(DATA_ENDPOINT)
     return response.text
 
 
