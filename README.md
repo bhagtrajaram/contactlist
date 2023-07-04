@@ -21,9 +21,13 @@ If you want to learn more about creating good readme files then refer the follow
 - https://pypi.org/project/Django/
 - https://pypi.org/project/djangorestframework/
 
-pytest
-cd /Users/bhagtrajaram/PycharmProjects/kpn_python_assignment/kpnapp
+# Comments
 pytest
 
-or within Pycharm
-pytest in /
+- cli: cd /Users/bhagtrajaram/PycharmProjects/kpn_python_assignment/kpnapp
+- Pycharm: pytest in /
+
+prepare database
+- python manage.py test
+- python manage.py makemigrations
+- python manage.py migrate
