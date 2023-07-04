@@ -30,8 +30,7 @@ class ContactListTestCase(TestCase):
         mock_requests.get.return_value = mock_response
         result_response = fetch_csv_entries(mock_requests)
 
-        self.assertEqual(result_response.status_code, mock_response.status_code)
-        self.assertEqual(result_response.text, mock_response.text)
+        self.assertEqual(result_response, mock_response.text)
 
     def test_get_html_table_of_contact_list(self):
         expected = '<table class="dataframe"> <thead> <tr style="text-align: right;"> <th></th> <th>id</th> <th>firstname</th> <th>lastname</th> <th>street</th> <th>zip</th> <th>city</th> <th>image</th> </tr> </thead> <tbody> <tr> <th>0</th> <td>1</td> <td>peer</td> <td>citroen</td> <td>appelstraat</td> <td>123</td> <td>Utrecht</td> <td><img src="https://some.image.somewhere" style=max-height:80px;"/></td> </tr> </tbody> </table>'

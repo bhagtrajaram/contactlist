@@ -1,7 +1,7 @@
 import requests
 from io import StringIO
 import pandas as pd
-from .decorators import handle_view_exception
+from .decorators import handle_connection_exception
 from .models import ContactList
 from django.shortcuts import render
 import logging
@@ -14,12 +14,15 @@ def users(request):
     response = fetch_csv_entries(
         request=request,
     )
-    logger.info(f"http response(csv-data):'{response.text}'")
     queryset = ContactList.objects.all()
 
     if queryset.exists() == False:
         """store only image links"""
-        ContactList.objects.bulk_create(get_contact_list(response=response.text))
+        if not isinstance(response, dict):
+            ContactList.objects.bulk_create(get_contact_list(response=response))
+            logger.info(f"http response(csv-data):'{response}'")
+        else:
+            logger.error(f"http response(csv-data):'{response}'")
 
     """render images"""
     return render(
@@ -29,7 +32,6 @@ def users(request):
 
 def get_contact_list(response: str) -> list[ContactList]:
     """parse http response into dataframe: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html"""
-    logger.info(f"http response(csv-data):'{response}'")
     df = pd.read_csv(StringIO(response), sep=",")
     row_iter = df.iterrows()
     contact_list: list[ContactList] = [
@@ -57,12 +59,11 @@ def get_html_table_of_contact_list() -> dict[str, str]:
     return data
 
 
-@handle_view_exception
-def fetch_csv_entries(request: requests.Request) -> requests.Response:
-    response = requests.get(
-        "https://docs.google.com/spreadsheets/d/1A77-RWx7x8PK2uDm_1XlXyCy2ID9-9lhwix8wPDd5X0/pub?gid=0&single=true&output=csv"
-    )
-    return response
+@handle_connection_exception
+def fetch_csv_entries(request: requests.Request) -> str:
+    url = "https://docs.google.com/spreadsheets/d/1A77-RWx7x8PK2uDm_1XlXyCy2ID9-9lhwix8wPDd5X0/pub?gid=0&single=true&output=csv"
+    response = requests.get(url)
+    return response.text
 
 
 def path_to_image_html(path) -> str:

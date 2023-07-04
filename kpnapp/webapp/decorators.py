@@ -1,13 +1,10 @@
 import functools
-
-from django.shortcuts import render
 from requests.exceptions import ConnectionError, RequestException
 
+BASE_ERROR_MESSAGE = "could not connect to the datasource provider:{error_reason}"
 
-BASE_ERROR_MESSAGE = "Could not connect to the datasource provider:{error_reason}"
 
-
-def handle_view_exception(func):
+def handle_connection_exception(func):
     """Decorator for handling exceptions."""
 
     @functools.wraps(func)
@@ -15,13 +12,13 @@ def handle_view_exception(func):
         try:
             response = func(request, *args, **kwargs)
         except RequestException as e:
-            error_reason = "Some unknown error occured contacting your data-provider"
+            error_reason = "some unknown error occured contacting your data-provider"
             if isinstance(e, ConnectionError):
-                error_reason = "Unknown data-provider"
+                error_reason = "unknown data-provider"
             context = {
                 "message": BASE_ERROR_MESSAGE.format(error_reason=error_reason),
             }
-            response = render(request, "error.html", {"context": context})
+            response = context
         return response
 
     return wrapper
