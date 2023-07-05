@@ -21,9 +21,11 @@ def users(request):
     if queryset.exists() == False:
         """store only image links"""
         if not isinstance(response, dict):
-            if get_contact_list(response=response):
-                ContactList.objects.bulk_create(get_contact_list(response=response))
+            contact_list: list[ContactList] = get_contact_list(response=response)
+            if contact_list:
                 logger.info(f"http response(csv-data):'{response}'")
+                logger.info(f"doing bulk_create on database using:\n'{contact_list}")
+                ContactList.objects.bulk_create(contact_list)
         else:
             logger.error(f"http response(csv-data):'{response}'")
 
@@ -89,8 +91,8 @@ def validate_schema(df: pd.DataFrame) -> bool:
     try:
         schema(df)
         schema_valid = True
-        logger.info(f"schema validate of csv-data):'{schema_valid}'")
+        logger.info(f"schema validation csv-data:'{schema_valid}'")
     except pa.errors.SchemaError as error:
         schema_valid = False
-        logger.error(f"schema validate of csv-data):'{schema_valid}'\n'{error}'")
+        logger.error(f"schema validation csv-data:'{schema_valid}'\n'{error}'")
     return schema_valid
