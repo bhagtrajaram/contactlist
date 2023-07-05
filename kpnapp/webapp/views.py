@@ -1,6 +1,7 @@
 import requests
 from io import StringIO
 import pandas as pd
+import pandera as pa
 from .decorators import handle_connection_exception
 from .models import ContactList
 from django.shortcuts import render
@@ -20,8 +21,9 @@ def users(request):
     if queryset.exists() == False:
         """store only image links"""
         if not isinstance(response, dict):
-            ContactList.objects.bulk_create(get_contact_list(response=response))
-            logger.info(f"http response(csv-data):'{response}'")
+            if get_contact_list(response=response):
+                ContactList.objects.bulk_create(get_contact_list(response=response))
+                logger.info(f"http response(csv-data):'{response}'")
         else:
             logger.error(f"http response(csv-data):'{response}'")
 
@@ -32,20 +34,22 @@ def users(request):
 
 
 def get_contact_list(response: str) -> list[ContactList]:
+    contact_list: list[ContactList] = []
     """parse http response into dataframe: https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html"""
     df = pd.read_csv(StringIO(response), sep=",")
-    row_iter = df.iterrows()
-    contact_list: list[ContactList] = [
-        ContactList(
-            firstname=row["firstname"],
-            lastname=row["lastname"],
-            street=row["street"],
-            zip=row["zip"],
-            city=row["city"],
-            image=row["image"],
-        )
-        for index, row in row_iter
-    ]
+    if validate_schema(df=df):
+        row_iter = df.iterrows()
+        contact_list: list[ContactList] = [
+            ContactList(
+                firstname=row["firstname"],
+                lastname=row["lastname"],
+                street=row["street"],
+                zip=row["zip"],
+                city=row["city"],
+                image=row["image"],
+            )
+            for index, row in row_iter
+        ]
     return contact_list
 
 
@@ -68,3 +72,25 @@ def fetch_csv_entries(request: requests.Request) -> str:
 
 def path_to_image_html(path) -> str:
     return '<img src="' + path + '" style=max-height:80px;"/>'
+
+
+def validate_schema(df: pd.DataFrame) -> bool:
+    schema = pa.DataFrameSchema(
+        {
+            "firstname": pa.Column(object, required=True),
+            "lastname": pa.Column(object, required=True),
+            "street": pa.Column(object, required=True),
+            "zip": pa.Column(int, required=True),
+            "city": pa.Column(object, required=True),
+            "image": pa.Column(object, required=True, nullable=True),
+        }
+    )
+
+    try:
+        schema(df)
+        schema_valid = True
+        logger.info(f"schema validate of csv-data):'{schema_valid}'")
+    except pa.errors.SchemaError as error:
+        schema_valid = False
+        logger.error(f"schema validate of csv-data):'{schema_valid}'\n'{error}'")
+    return schema_valid
